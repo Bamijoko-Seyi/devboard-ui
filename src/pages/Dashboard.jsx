@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { listProjects, createProject, deleteProject } from "../api/projects";
+import {ProjectCardSkeleton} from "../components/skeleton.jsx";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
     const { user, logout } = useAuth();
@@ -36,8 +38,10 @@ export default function Dashboard() {
             setName("");
             setDescription("");
             setShowCreate(false);
+            toast.success("Project Successfully Created!");
         } catch (err) {
             setError(err.response?.data?.message || "Failed to create project");
+            toast.error("Failed to Create Project");
         }
     }
 
@@ -45,6 +49,7 @@ export default function Dashboard() {
         if (!confirm("Delete this project?")) return;
         await deleteProject(id);
         setProjects(projects.filter((p) => p.id !== id));
+        toast.success("Project Successfully Deleted!");
     }
 
     return (
@@ -114,10 +119,20 @@ export default function Dashboard() {
                 )}
 
                 {loading ? (
-                    <p className="text-gray-500">Loading projects...</p>
+                    <div className="grid gap-4">
+                        <ProjectCardSkeleton />
+                        <ProjectCardSkeleton />
+                        <ProjectCardSkeleton />
+                    </div>
                 ) : projects.length === 0 ? (
-                    <div className="bg-white p-8 rounded shadow text-center text-gray-500">
-                        No projects yet. Create your first one.
+                    <div className="bg-white p-8 rounded shadow text-center">
+                        <p className="text-gray-500 mb-4">No projects yet.</p>
+                        <button
+                            onClick={() => setShowCreate(true)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        >
+                            Create your first project
+                        </button>
                     </div>
                 ) : (
                     <div className="grid gap-4">

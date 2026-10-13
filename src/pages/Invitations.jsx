@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listMyPendingInvitations, acceptInvitation, declineInvitation } from "../api/invitations";
+import toast from "react-hot-toast";
 
 export default function Invitations() {
     const [invitations, setInvitations] = useState([]);
@@ -25,11 +26,13 @@ export default function Invitations() {
     async function handleAccept(id) {
         await acceptInvitation(id);
         setInvitations(invitations.filter((i) => i.id !== id));
+        toast.success("Invitation Successfully Accepted!");
     }
 
     async function handleDecline(id) {
         await declineInvitation(id);
         setInvitations(invitations.filter((i) => i.id !== id));
+        toast.success("Invitation Successfully Declined!");
     }
 
     return (

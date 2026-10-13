@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/auth";
+import toast from "react-hot-toast";
 
 export default function Register() {
     const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export default function Register() {
         try {
             await register(email, password, displayName);
             navigate("/login");
+            toast.success("Account Successfully Registered!")
         } catch (err) {
             setError(err.response?.data?.message || "Registration failed");
         }

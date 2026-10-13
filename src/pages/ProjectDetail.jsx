@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { getProject, updateProject, deleteProject, listProjectMembers } from "../api/projects";
 import { inviteUser } from "../api/invitations";
 import TaskBoard from "../components/TaskBoard";
+import toast from "react-hot-toast";
 
 export default function ProjectDetail() {
     const { id } = useParams();
@@ -31,6 +32,7 @@ export default function ProjectDetail() {
             setMembers(mems);
             setName(proj.name);
             setDescription(proj.description || "");
+
         } catch (err) {
             setError(err.response?.data?.message || "Failed to load project");
         } finally {
@@ -45,6 +47,7 @@ export default function ProjectDetail() {
             const updated = await updateProject(id, name, description);
             setProject(updated);
             setEditing(false);
+            toast.success("Project Successfully Updated")
         } catch (err) {
             setError(err.response?.data?.message || "Failed to update");
         }
@@ -54,6 +57,7 @@ export default function ProjectDetail() {
         if (!confirm("Delete this project?")) return;
         await deleteProject(id);
         navigate("/dashboard");
+        toast.success("Project Successfully Deleted")
     }
 
     async function handleInvite(e) {

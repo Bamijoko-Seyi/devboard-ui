@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Invitations from "./pages/Invitations.jsx";
+import { Toaster } from "react-hot-toast";
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -23,6 +24,7 @@ function PublicRoute({ children }) {
 export default function App() {
   return (
       <AuthProvider>
+        <Toaster position="top-right" />
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
